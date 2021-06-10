@@ -66,7 +66,7 @@ def download_file():
                     if not buffer:
                         raise Exception("Incomplete file received")
                     packet += buffer
-                filename = 'save/new_2_' + filename
+                filename = '/Users/macbookair/Downloads_python/' + filename
                 with open(filename, 'wb') as f:
                     f.write(packet)
 
