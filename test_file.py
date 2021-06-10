@@ -1,22 +1,6 @@
 import socket
 from flask import Flask, render_template, request, redirect, url_for
 
-"""
-awith socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
-    filename = '/Users/evgenij/Downloads/123.png'
-    print("Sending:", filename)
-    with open(filename, 'rb') as f:
-        raw = f.read()
-
-    s.sendall(len(raw).to_bytes(8, 'big'))
-    s.sendall(raw)
-
-    data = s.recv(1024)
-    s.close()
-
-print("Received", repr(data))"""
-
 app = Flask(__name__)
 
 HOST = "127.0.0.1"

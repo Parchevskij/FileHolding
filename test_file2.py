@@ -16,10 +16,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             filesize = int.from_bytes(expected_filesize, 'big')
             filename = conn.recv(filesize).decode()
             expected_size = b""
-            #filename = conn.recv(12)
-            #print('Server accept {}'.format(filename))
-            #filename = filename.decode()
-            #print('Final string has this view {}'.format(filename))
+
             while len(expected_size) < 8:
                 more_size = conn.recv(8 - len(expected_size))
                 if not more_size:
@@ -32,11 +29,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 if not buffer:
                     raise Exception("Incomplete file received")
                 packet += buffer
-            #filename = 'new_file.png'
+
             with open(filename, 'wb') as f:
                 f.write(packet)
-            '''while True:
-                data = conn.recv(1024)
-                if not data:
-                    break
-                conn.sendall(data)'''
