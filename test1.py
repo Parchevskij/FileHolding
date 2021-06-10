@@ -1,7 +1,12 @@
 import socket
 
+'''
+    Server
+'''
+
 HOST = "127.0.0.1"
 PORT = 65431
+filename = 'test.pdf'
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
@@ -36,4 +41,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         else:
             print("Server Sending")
             with conn:
-                conn.sendall(b'Do this!')
+                with open('data/' + filename, 'rb') as f:
+                    raw = f.read()
+
+                conn.sendall(len(filename).to_bytes(4, 'big'))
+                conn.sendall(filename.encode())
+                conn.sendall(len(raw).to_bytes(8, 'big'))
+                conn.sendall(raw)
