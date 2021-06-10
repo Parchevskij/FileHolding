@@ -35,15 +35,14 @@ def upload_file():
     print("Received")
     return redirect('/upload')
 
-@app.route('/load', methods=['POST', 'GET'])
+@app.route('/download')
 def download_file():
-    if request.method == "POST":
 
-        HOST = "127.0.0.1"
-        PORT = 65431
+    HOST = "127.0.0.1"
+    PORT = 65431
+    filename = request.args['name']
 
-        filename = request.form['filename']
-
+    if request.args["action"] == "upl":
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((HOST, PORT))
 
@@ -74,12 +73,15 @@ def download_file():
                 filename = '/Users/macbookair/Downloads_python/' + filename
                 with open(filename, 'wb') as f:
                     f.write(packet)
-
-        return redirect('/')
+        return redirect('/disk')
+    elif request.args["action"] == "del":
+        os.remove('data/'+filename)
+        return redirect('/disk')
     else:
-        return render_template('download.html')
+        return redirect('/disk')
 
-@app.route('/disk', methods=['GET', 'POST'])
+
+@app.route('/disk', methods=['GET'])
 def disk():
     database_files = os.listdir('data/')
     database_sizes = list()

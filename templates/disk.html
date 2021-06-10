@@ -8,6 +8,8 @@
                 <tr>
                   <th>Name</th>
                   <th>Size</th>
+                  <th></th>
+                  <th></th>
                 </tr>
         </thead>
         {% for filename, filesize in data %}
@@ -15,14 +17,19 @@
             <td>
                 <div style="display: flex">
                     <img src="./folder_icon.jpg" alt="">
-                    <a href="../database/{{ filename }}">{{ filename }}</a>
+                    <p>{{ filename }}</p>
                 </div>
-
             </td>
             <td>{{ filesize }}</td>
-            <td><button class="btn" style="width:100%"> <i class="fa fa-download"></i> Download</button></td>
+            <td>
+                <a href="/download?name={{filename}}&action=upl" class="btn btn-success">Download</a>
+            </td>
+            <td>
+                <a href="/download?name={{filename}}&action=del" class="btn btn-danger">Delete</a>
+            </td>
         </tr>
         {% endfor %}
     </table>
     <!--<a href="../database/1596747642220-01.jpeg">name</a>-->
 {% endblock %}
+
