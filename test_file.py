@@ -7,10 +7,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/upload')
+def upload():
     return render_template('upload.html')
 
 
-@app.route('/', methods=['POST'])
+@app.route('/upload', methods=['POST'])
 def upload_file():
     HOST = "127.0.0.1"
     PORT = 65431
@@ -29,7 +33,7 @@ def upload_file():
         s.sendall(len(raw).to_bytes(8, 'big'))
         s.sendall(raw)
     print("Received")
-    return redirect(url_for('index'))
+    return redirect('/upload')
 
 @app.route('/load', methods=['POST', 'GET'])
 def download_file():

@@ -36,7 +36,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     if not buffer:
                         raise Exception("Incomplete file received")
                     packet += buffer
-                filename = 'data/new_'+filename
+                filename = 'data/'+filename
                 with open(filename, 'wb') as f:
                     f.write(packet)
         else:
