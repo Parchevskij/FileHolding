@@ -10,7 +10,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     print("Sending:", filename)
     with open(filename, 'rb') as f:
         raw = f.read()
-    #s.sendall(filename.encode('ascii'))
+
+    s.sendall(len(filename).to_bytes(4, 'big'))
+    s.sendall(filename.encode())
+    #print(len(filename.encode()))
     s.sendall(len(raw).to_bytes(8, 'big'))
     s.sendall(raw)
 

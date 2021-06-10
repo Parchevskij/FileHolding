@@ -41,6 +41,9 @@ def upload_file():
             #raw = f.read()
         raw = uploaded_file.read()
 
+        s.sendall(len(uploaded_file.filename).to_bytes(4, 'big'))
+        s.sendall(uploaded_file.filename.encode('ascii'))
+        #print(uploaded_file.filename.encode('utf-8'))
         s.sendall(len(raw).to_bytes(8, 'big'))
         s.sendall(raw)
 
