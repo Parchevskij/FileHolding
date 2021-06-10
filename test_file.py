@@ -15,16 +15,6 @@ def upload_file():
     PORT = 65431
     uploaded_file = request.files['file']
     raw = uploaded_file.read()
-    '''
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        raw = uploaded_file.read()
-
-        s.sendall(len(uploaded_file.filename).to_bytes(4, 'big'))
-        s.sendall(uploaded_file.filename.encode('ascii'))
-        s.sendall(len(raw).to_bytes(8, 'big'))
-        s.sendall(raw)
-    '''
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))
@@ -39,6 +29,50 @@ def upload_file():
         s.sendall(raw)
     print("Received")
     return redirect(url_for('index'))
+
+@app.route('/load', methods=['POST', 'GET'])
+def download_file():
+    if request.method == "POST":
+
+        HOST = "127.0.0.1"
+        PORT = 65431
+
+        filename = request.form['filename']
+
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((HOST, PORT))
+
+            print("Client Sending flag")
+            flag: int = 2
+            s.send(flag.to_bytes(1, 'big'))
+
+            print('Client Receiving')
+            with s:
+
+                s.sendall(len(filename).to_bytes(4, 'big'))
+                s.sendall(filename.encode())
+
+                expected_size = b""
+                while len(expected_size) < 8:
+                    more_size = s.recv(8 - len(expected_size))
+                    if not more_size:
+                        raise Exception("Short file length received")
+                    expected_size += more_size
+                expected_size = int.from_bytes(expected_size, 'big')
+
+                packet = b""
+                while len(packet) < expected_size:
+                    buffer = s.recv(expected_size - len(packet))
+                    if not buffer:
+                        raise Exception("Incomplete file received")
+                    packet += buffer
+                filename = 'save/new_2_' + filename
+                with open(filename, 'wb') as f:
+                    f.write(packet)
+
+        return redirect('/')
+    else:
+        return render_template('download.html')
 
 
 if __name__ == "__main__":
