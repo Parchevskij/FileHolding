@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table class="table table-striped table-sm">
+        <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Size</th>
+                </tr>
+        </thead>
+        {% for filename, filesize in data %}
+        <tr>
+            <td>
+                <div style="display: flex">
+                    <img src="./folder_icon.jpg" alt="">
+                    <a href="../database/{{ filename }}">{{ filename }}</a>
+                </div>
+
+            </td>
+            <td>{{ filesize }}</td>
+            <td><button class="btn" style="width:100%"> <i class="fa fa-download"></i> Download</button></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <!--<a href="../database/1596747642220-01.jpeg">name</a>-->
+</body>
+</html>

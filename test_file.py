@@ -1,5 +1,6 @@
 import socket
 from flask import Flask, render_template, request, redirect, url_for
+import os
 
 app = Flask(__name__)
 
@@ -73,6 +74,30 @@ def download_file():
         return redirect('/')
     else:
         return render_template('download.html')
+
+@app.route('/disk', methods=['GET', 'POST'])
+def disk():
+    database_files = os.listdir('data/')
+    database_sizes = list()
+    for file in database_files:
+        file_size = os.path.getsize('data/'+file)
+        if file_size > 10**9:
+            file_size /= 1024**3
+            file_weight = 'Gb'
+            size = '%.2f'%file_size+' {}'.format(file_weight)
+        elif file_size > 10**6:
+            file_size /= 1024**2
+            file_weight = 'MB'
+            size = '%.2f' % file_size + ' {}'.format(file_weight)
+        else:
+            file_size /= 1024
+            file_weight = 'kB'
+            size = '%.2f' % file_size + ' {}'.format(file_weight)
+
+        database_sizes.append(size)
+    print(database_files, database_sizes)
+    data = zip(database_files, database_sizes)
+    return render_template('disk.html', data=data)
 
 
 if __name__ == "__main__":
