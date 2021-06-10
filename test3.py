@@ -11,6 +11,11 @@ PORT = 65431
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((HOST, PORT))
+
+    print("Client Sending flag")
+    flag: int = 2
+    s.send(flag.to_bytes(1, 'big'))
+
     print('Client Receiving')
     with s:
         expected_filesize = s.recv(4)

@@ -14,7 +14,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     while True:
         conn, addr = s.accept()
         print("Connected by", addr)
-        val = int(input("write 1 or 2 \n"))
+        print("Server receiving flag")
+        val = int.from_bytes(conn.recv(1), 'big')
+        print(val)
         if val == 1:
             print('Server Receiving')
             with conn:
